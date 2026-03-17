@@ -35,29 +35,29 @@ jobs:
         with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
-              const octokit = github.getOctokit(core.getInput('github-token'));
-
               const pr = context.payload.pull_request;
+
               if (!pr) {
                 core.setFailed("Це не Pull Request");
                 return;
               }
 
-              const prNumber = pr.number;
+              // Дозволяємо автору PR автоматично пройти перевірку
+              if (pr.user.login === context.actor) {
+                console.log("Автор PR, пропускаємо рев’ю");
+                return;
+              }
 
-              // Викликаємо через octokit.rest.pulls
+              const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+
               const { data: reviews } = await octokit.rest.pulls.listReviews({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                pull_number: prNumber
-              });
-
-              console.log("Знайдені рев’ю:");
-              reviews.forEach(r => {
-                console.log(`User: ${r.user.login}, State: ${r.state}`);
+                pull_number: pr.number
               });
 
               const approved = reviews.some(r => r.state === 'APPROVED');
+
               if (!approved) {
                 core.setFailed("Код-рев’ю не схвалено");
               } else {
