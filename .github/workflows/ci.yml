@@ -35,9 +35,9 @@ jobs:
         with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
-              const token = core.getInput('github-token');
-              const octokit = github.getOctokit(token);
-      
+              // Отримуємо Octokit через github.getOctokit
+              const octokit = github.getOctokit(core.getInput('github-token'));
+
               const pr = context.payload.pull_request;
 
               if (!pr) {
@@ -47,7 +47,8 @@ jobs:
 
               const prNumber = pr.number;
 
-              const { data: reviews } = await octokit.pulls.listReviews({
+              // Тільки так працює listReviews
+              const { data: reviews } = await octokit.rest.pulls.listReviews({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 pull_number: prNumber
