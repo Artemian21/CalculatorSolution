@@ -5,13 +5,6 @@ VisualStudioVersion = 17.14.36603.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator", "Calculator\Calculator.csproj", "{6616DF8A-54A9-413C-BC8A-DA00BA057006}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{3E1D2D2A-57F4-4857-BD82-A04D1C1A8289}"
-	ProjectSection(SolutionItems) = preProject
-		ci.yml = ci.yml
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2AD2661B-F920-4BBA-B6DF-99947B514837}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B519FD74-22A8-47C9-B8CC-A9F55D160726}"
@@ -21,13 +14,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{754FC069-D67B-A9D7-50A1-8D1CA196D8F1}"
 	ProjectSection(SolutionItems) = preProject
 		sonar-project.properties = sonar-project.properties
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{ED29D7AE-92A6-4EE4-AF06-DD7EAC3CDCD1}"
-	ProjectSection(SolutionItems) = preProject
-		..\.github\workflows\ci.yml = ..\.github\workflows\ci.yml
 	EndProjectSection
 EndProject
 Global
@@ -51,7 +37,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{6616DF8A-54A9-413C-BC8A-DA00BA057006} = {2AD2661B-F920-4BBA-B6DF-99947B514837}
 		{7E031C67-9647-479B-9AE8-A17E00398EB9} = {B519FD74-22A8-47C9-B8CC-A9F55D160726}
-		{ED29D7AE-92A6-4EE4-AF06-DD7EAC3CDCD1} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {767D1119-C176-48C1-9B32-F872E3B55006}
