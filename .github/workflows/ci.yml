@@ -33,31 +33,35 @@ jobs:
       - name: Code Review Check for develop
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const pr = context.payload.pull_request;
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            script: |
+              const token = core.getInput('github-token');
+              const octokit = github.getOctokit(token);
+      
+              const pr = context.payload.pull_request;
 
-            if (!pr) {
-              core.setFailed("Це не Pull Request");
-              return;
-            }
+              if (!pr) {
+                core.setFailed("Це не Pull Request");
+                return;
+              }
 
-            const prNumber = pr.number;
-            const { data: reviews } = await github.pulls.listReviews({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber
-            });
+              const prNumber = pr.number;
 
-            console.log("Знайдені рев’ю:");
-            reviews.forEach(r => {
-              console.log(`User: ${r.user.login}, State: ${r.state}`);
-            });
+              const { data: reviews } = await octokit.pulls.listReviews({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber
+              });
 
-            const approved = reviews.some(review => review.state === 'APPROVED');
+              console.log("Знайдені рев’ю:");
+              reviews.forEach(r => {
+                console.log(`User: ${r.user.login}, State: ${r.state}`);
+              });
 
-            if (!approved) {
-              core.setFailed("Код-рев’ю не схвалено");
-            } else {
-              console.log("Є схвалене рев’ю");
-            }
+              const approved = reviews.some(review => review.state === 'APPROVED');
+
+              if (!approved) {
+                core.setFailed("Код-рев’ю не схвалено");
+              } else {
+                console.log("Є схвалене рев’ю");
+              }
