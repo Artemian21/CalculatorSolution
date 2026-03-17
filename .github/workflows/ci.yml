@@ -25,7 +25,7 @@ jobs:
         run: dotnet build CalculatorSolution.sln --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet test tests/Calculator.Tests/Calculator.Tests.csproj --no-build --logger "trx;LogFileName=test_results.trx"
+        run: dotnet test CalculatorSolution.sln --no-build --logger "trx;LogFileName=test_results.trx"
 
   analysis:
     runs-on: windows-latest
@@ -42,7 +42,7 @@ jobs:
             const pr = context.payload.pull_request;
 
             if (!pr) {
-              core.setFailed("Φε νε Pull Request");
+              core.setFailed("Γ–Γ¥ Γ­Γ¥ Pull Request");
               return;
             }
 
@@ -54,7 +54,7 @@ jobs:
               pull_number: prNumber
             });
 
-            console.log("Ηνΰιδεν³ πεβ’ώ:");
+            console.log("Γ‡Γ­Γ Γ©Γ¤Γ¥Γ­Β³ Γ°Γ¥ΓΆβ€™ΓΎ:");
             reviews.forEach(r => {
               console.log(`User: ${r.user.login}, State: ${r.state}`);
             });
@@ -62,7 +62,7 @@ jobs:
             const approved = reviews.some(review => review.state === 'APPROVED');
 
             if (!approved) {
-              core.setFailed("Κξδ-πεβ’ώ νε ρυβΰλενξ");
+              core.setFailed("ΓΓ®Γ¤-Γ°Γ¥ΓΆβ€™ΓΎ Γ­Γ¥ Γ±ΓµΓΆΓ Γ«Γ¥Γ­Γ®");
             } else {
-              console.log("ª ρυβΰλενε πεβ’ώ");
+              console.log("Βª Γ±ΓµΓΆΓ Γ«Γ¥Γ­Γ¥ Γ°Γ¥ΓΆβ€™ΓΎ");
             }
