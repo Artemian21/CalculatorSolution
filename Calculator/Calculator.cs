@@ -14,9 +14,6 @@ namespace Calculator
         // Віднімання
         public double Subtract(double a, double b) => a - b;
 
-        // Множення
-        public double Multiply(double a, double b) => a * b;
-
         // Ділення
         public double Divide(double a, double b)
         {
@@ -24,5 +21,8 @@ namespace Calculator
                 throw new DivideByZeroException("Cannot divide by zero");
             return a / b;
         }
+
+        // Множення
+        public double Multiply(double a, double b) => a * b;
     }
 }
