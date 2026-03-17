@@ -33,33 +33,38 @@ jobs:
       - name: Code Review Check for develop
         uses: actions/github-script@v6
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            script: |
-              const pr = context.payload.pull_request;
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+      
+            if (!pr) {
+              core.setFailed("Це не Pull Request");
+              return;
+            }
 
-              if (!pr) {
-                core.setFailed("Це не Pull Request");
-                return;
-              }
+            const prNumber = pr.number;
+            const prAuthor = pr.user.login; // автор PR
 
-              // Дозволяємо автору PR автоматично пройти перевірку
-              if (pr.user.login === context.actor) {
-                console.log("Автор PR, пропускаємо рев’ю");
-                return;
-              }
+            // Викликаємо listReviews
+            const { data: reviews } = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
 
-              const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+            console.log("Знайдені рев’ю:");
+            reviews.forEach(r => {
+              console.log(`User: ${r.user.login}, State: ${r.state}`);
+            });
 
-              const { data: reviews } = await octokit.rest.pulls.listReviews({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: pr.number
-              });
-
-              const approved = reviews.some(r => r.state === 'APPROVED');
-
+            // Перевірка: якщо автор PR сам запускає CI, завжди успішно
+            if (pr.user.login === context.actor) {
+              console.log("Автор PR - це виконавець workflow, рев’ю пропущено");
+            } else {
+              const approved = reviews.some(review => review.state === 'APPROVED');
               if (!approved) {
                 core.setFailed("Код-рев’ю не схвалено");
               } else {
                 console.log("Є схвалене рев’ю");
               }
+            }
