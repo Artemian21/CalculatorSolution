@@ -13,7 +13,7 @@ jobs:
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v3
         with:
-           dotnet-version: '8.0.x'
+          dotnet-version: '8.0.x'
 
       - name: Restore dependencies
         run: dotnet restore CalculatorSolution.sln
@@ -29,11 +29,11 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v3
-  
+
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v3
         with:
-            dotnet-version: '8.0.x'
+          dotnet-version: '8.0.x'
 
       - name: Count lines of code with CLOC
         run: |
@@ -87,16 +87,15 @@ jobs:
               }
             }
 
-      - name: Run StyleCop with Reviewdog
-        uses: reviewdog/action-stylecop@v1
-        with:
-           github_token: ${{ secrets.GITHUB_TOKEN }}
-           reporter: github-pr-review
-           level: error
+      - name: Install reviewdog
+        run: choco install reviewdog -y
 
-      - name: Run dotnet format
-        uses: reviewdog/action-dotnet-format@v1
+      - name: Run StyleCop with Reviewdog
+        uses: reviewdog/action-stylecop@v0.2.0
         with:
-           github_token: ${{ secrets.GITHUB_TOKEN }}
-           reporter: github-pr-review
-           level: info
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          level: error
+
+      - name: Run dotnet format with Reviewdog
+        run: dotnet format --check | reviewdog -f=msbuild -name="dotnet-format" -reporter=github-pr-review -level=info
