@@ -14,7 +14,7 @@ namespace Calculator.Tests
         [Test]
         public void Add_ShouldReturnSum()
         {
-            Assert.AreEqual(5, _calc.Add(2, 3));
+            Assert.AreEqual(5, _calc.add(2, 3));
         }
 
         [Test]

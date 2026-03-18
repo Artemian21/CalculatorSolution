@@ -23,7 +23,7 @@
                     double b = double.Parse(inputB);
                     double result = op switch
                     {
-                        "+" => calc.Add(a, b),
+                        "+" => calc.add(a, b),
                         "-" => calc.Subtract(a, b),
                         "*" => calc.Multiply(a, b),
                         "/" => calc.Divide(a, b),
