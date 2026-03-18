@@ -87,12 +87,15 @@ jobs:
               }
             }
 
-      - name: Install reviewdog
-        run: choco install reviewdog -y
+      - name: Setup reviewdog
+        uses: reviewdog/action-setup@v1.4.0
+        with:
+          reviewdog_version: latest
 
       - name: Run StyleCop with Reviewdog
         run: |
             dotnet build CalculatorSolution.sln /p:RunAnalyzersDuringBuild=true | reviewdog -f=msbuild -name="StyleCop" -reporter=github-pr-review -level=error
 
       - name: Run dotnet format with Reviewdog
-        run: dotnet format --check | reviewdog -f=msbuild -name="dotnet-format" -reporter=github-pr-review -level=info
+        run: |
+            dotnet format --check | reviewdog -f=msbuild -name="dotnet-format" -reporter=github-pr-review -level=info
