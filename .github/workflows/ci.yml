@@ -41,9 +41,9 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"CalculatorProject" /d:sonar.login=$SONAR_TOKEN
+          dotnet sonarscanner begin /k:"CalculatorProject" /d:sonar.login="$env:SONAR_TOKEN"
           dotnet build CalculatorSolution.sln
-          dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
+          dotnet sonarscanner end /d:sonar.login="$env:SONAR_TOKEN"
 
       - name: Code Review Check for develop
         uses: actions/github-script@v6
