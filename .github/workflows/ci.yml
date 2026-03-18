@@ -30,22 +30,35 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Count lines of code with CLOC
+        run: |
+          choco install cloc -y
+          cloc Calculator > cloc-report.txt
+          type cloc-report.txt
+
+      - name: Run SonarQube analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
+          dotnet sonarscanner begin /k:"CalculatorProject" /d:sonar.login=$SONAR_TOKEN
+          dotnet build CalculatorSolution.sln
+          dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
+
       - name: Code Review Check for develop
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const pr = context.payload.pull_request;
-      
             if (!pr) {
               core.setFailed("Це не Pull Request");
               return;
             }
-      
-            const prNumber = pr.number;
-            const prAuthor = pr.user.login; // автор PR
 
-            // Викликаємо listReviews
+            const prNumber = pr.number;
+            const prAuthor = pr.user.login;
+
             const { data: reviews } = await github.rest.pulls.listReviews({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -57,7 +70,6 @@ jobs:
               console.log(`User: ${r.user.login}, State: ${r.state}`);
             });
 
-            // Перевірка: якщо автор PR сам запускає CI, завжди успішно
             if (pr.user.login === context.actor) {
               console.log("Автор PR - це виконавець workflow, рев’ю пропущено");
             } else {
