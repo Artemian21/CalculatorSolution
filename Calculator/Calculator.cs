@@ -9,7 +9,7 @@ namespace Calculator
     public class Calculator
     {
         // Додавання
-        public double Add(double a, double b) => a + b;
+        public double add(double a, double b) { return a + b; }
 
         // Віднімання
         public double Subtract(double a, double b) => a - b;
