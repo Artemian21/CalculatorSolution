@@ -92,13 +92,12 @@ jobs:
         with:
           reviewdog_version: latest
 
+      # Запуск StyleCop через reviewdog
       - name: Run StyleCop with Reviewdog
-        uses: reviewdog/action-stylecop@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          level: error
+        run: |
+           dotnet build CalculatorSolution.sln /p:RunAnalyzersDuringBuild=true | reviewdog -f=msbuild -name="StyleCop" -reporter=github-pr-review -level=error
 
+      # Запуск dotnet-format через reviewdog
       - name: Run dotnet format with Reviewdog
         run: |
-            dotnet format --check | reviewdog -f=msbuild -name="dotnet-format" -reporter=github-pr-review -level=info
+           dotnet format --check | reviewdog -f=msbuild -name="dotnet-format" -reporter=github-pr-review -level=info
