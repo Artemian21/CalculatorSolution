@@ -39,9 +39,10 @@ jobs:
       - name: Run SonarQube analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_ORG: ${{ secrets.SONAR_ORG }}
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"CalculatorProject" /d:sonar.login="$env:SONAR_TOKEN"
+          dotnet sonarscanner begin /k:"CalculatorProject" /o:"$env:SONAR_ORG" /d:sonar.login="$env:SONAR_TOKEN"
           dotnet build CalculatorSolution.sln
           dotnet sonarscanner end /d:sonar.login="$env:SONAR_TOKEN"
 
