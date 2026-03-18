@@ -41,7 +41,7 @@ jobs:
               core.setFailed("Це не Pull Request");
               return;
             }
-
+      
             const prNumber = pr.number;
             const prAuthor = pr.user.login; // автор PR
 
