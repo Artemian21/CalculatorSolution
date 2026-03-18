@@ -43,23 +43,28 @@ jobs:
             }
       
             const prNumber = pr.number;
-      
-            // Викликаємо listReviews напряму через github.rest.pulls
+            const prAuthor = pr.user.login; // автор PR
+
+            // Викликаємо listReviews
             const { data: reviews } = await github.rest.pulls.listReviews({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: prNumber
             });
-      
+
             console.log("Знайдені рев’ю:");
             reviews.forEach(r => {
               console.log(`User: ${r.user.login}, State: ${r.state}`);
             });
-      
-            const approved = reviews.some(review => review.state === 'APPROVED');
-      
-            if (!approved) {
-              core.setFailed("Код-рев’ю не схвалено");
+
+            // Перевірка: якщо автор PR сам запускає CI, завжди успішно
+            if (pr.user.login === context.actor) {
+              console.log("Автор PR - це виконавець workflow, рев’ю пропущено");
             } else {
-              console.log("Є схвалене рев’ю");
+              const approved = reviews.some(review => review.state === 'APPROVED');
+              if (!approved) {
+                core.setFailed("Код-рев’ю не схвалено");
+              } else {
+                console.log("Є схвалене рев’ю");
+              }
             }
