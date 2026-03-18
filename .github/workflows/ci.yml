@@ -100,4 +100,4 @@ jobs:
       - name: Run dotnet format with Reviewdog
         run: |
             $env:REVIEWDOG_GITHUB_API_TOKEN = "${{ secrets.GITHUB_TOKEN }}"
-            dotnet format CalculatorSolution.sln --check | reviewdog -f=msbuild -name="dotnet-format" -reporter=github-pr-review -level=info
+            dotnet format CalculatorSolution.sln --verify-no-changes | reviewdog -f=msbuild -name="dotnet-format" -reporter=github-pr-review -level=info
