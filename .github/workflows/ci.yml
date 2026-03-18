@@ -91,11 +91,8 @@ jobs:
         run: choco install reviewdog -y
 
       - name: Run StyleCop with Reviewdog
-        uses: reviewdog/action-stylecop@v0.2.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          level: error
+        run: |
+            dotnet build CalculatorSolution.sln /p:RunAnalyzersDuringBuild=true | reviewdog -f=msbuild -name="StyleCop" -reporter=github-pr-review -level=error
 
       - name: Run dotnet format with Reviewdog
         run: dotnet format --check | reviewdog -f=msbuild -name="dotnet-format" -reporter=github-pr-review -level=info
